@@ -2,6 +2,8 @@
 
 A business loan referral and e-signature platform inspired by DocuSign. Supports two-way digital agreements, commission tracking, lead management, and integrates with DigitalOcean Spaces and SendGrid. Built with Node.js, React, MongoDB, and Docker.
 
+> **🚀 Quick Start**: Want to deploy immediately? See [QUICKSTART.md](QUICKSTART.md) for a 5-minute deployment guide.
+
 ## Features
 
 - **E-Signature Platform**: Upload documents and request signatures from multiple parties
