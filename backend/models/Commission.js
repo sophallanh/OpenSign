@@ -56,7 +56,9 @@ commissionSchema.pre('save', function(next) {
 // Calculate commission amount before saving
 commissionSchema.pre('save', function(next) {
   if (this.isModified('loanAmount') || this.isModified('rate')) {
-    this.amount = (this.loanAmount * this.rate) / 100;
+    if (this.loanAmount && this.rate !== undefined) {
+      this.amount = (this.loanAmount * this.rate) / 100;
+    }
   }
   next();
 });

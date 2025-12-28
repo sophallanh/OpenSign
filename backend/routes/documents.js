@@ -33,6 +33,16 @@ router.post('/', protect, upload.single('file'), async (req, res) => {
     // Upload to DigitalOcean Spaces
     const { url, key } = await uploadToSpaces(req.file);
 
+    // Parse signers safely
+    let signers = [];
+    if (req.body.signers) {
+      try {
+        signers = JSON.parse(req.body.signers);
+      } catch (parseError) {
+        return res.status(400).json({ message: 'Invalid signers format. Must be valid JSON.' });
+      }
+    }
+
     const document = await Document.create({
       title: req.body.title || req.file.originalname,
       description: req.body.description,
@@ -40,7 +50,7 @@ router.post('/', protect, upload.single('file'), async (req, res) => {
       fileKey: key,
       fileSize: req.file.size,
       owner: req.user._id,
-      signers: req.body.signers ? JSON.parse(req.body.signers) : []
+      signers
     });
 
     res.status(201).json({

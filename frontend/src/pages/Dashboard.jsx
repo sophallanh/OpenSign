@@ -29,14 +29,14 @@ const Dashboard = () => {
       ]);
 
       setStats({
-        documents: docsRes.data.count,
-        leads: leadsRes.data.count,
-        commissions: commissionsRes.data.count,
+        documents: docsRes.data.documents?.length || 0,
+        leads: leadsRes.data.leads?.length || 0,
+        commissions: commissionsRes.data.commissions?.length || 0,
         totalEarnings: commissionsRes.data.totals?.paid || 0
       });
 
-      setRecentDocuments(docsRes.data.documents.slice(0, 5));
-      setRecentLeads(leadsRes.data.leads.slice(0, 5));
+      setRecentDocuments(docsRes.data.documents?.slice(0, 5) || []);
+      setRecentLeads(leadsRes.data.leads?.slice(0, 5) || []);
     } catch (error) {
       toast.error('Failed to load dashboard data');
     } finally {
