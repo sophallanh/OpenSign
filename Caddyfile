@@ -1,7 +1,14 @@
 {$HOST_URL} {
-    reverse_proxy client:3000
+    # Proxy API requests to Parse Server backend
     handle_path /api/* {
         reverse_proxy server:8080
-            rewrite * {uri}
     }
+    
+    # Proxy Parse Server app endpoint directly
+    handle /app* {
+        reverse_proxy server:8080
+    }
+    
+    # Serve frontend for all other requests
+    reverse_proxy client:3000
 }
