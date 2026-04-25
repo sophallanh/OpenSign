@@ -138,6 +138,14 @@ const sidebarList = [
     ]
   },
   {
+    icon: "fa-light fa-file-invoice-dollar",
+    title: "Commissions",
+    target: "_self",
+    pageType: "",
+    description: "Track referral commissions from loan signings",
+    objectId: "commissions"
+  },
+  {
     icon: "fa-light fa-address-book",
     title: "Contactbook",
     target: "_self",

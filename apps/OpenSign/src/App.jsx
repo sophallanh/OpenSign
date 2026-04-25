@@ -35,6 +35,7 @@ const UpdateExistUserAdmin = lazyWithRetry(
 const Preferences = lazyWithRetry(() => import("./pages/Preferences"));
 const Login = lazyWithRetry(() => import("./pages/Login"));
 const VerifyDocument = lazyWithRetry(() => import("./pages/VerifyDocument"));
+const CommissionDashboard = lazyWithRetry(() => import("./pages/CommissionDashboard"));
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
 const AppLoader = () => {
   return (
@@ -134,6 +135,10 @@ function App() {
               <Route
                 path="/preferences"
                 element={<Lazy Page={Preferences} />}
+              />
+              <Route
+                path="/commissions"
+                element={<Lazy Page={CommissionDashboard} />}
               />
             </Route>
             <Route path="/success" element={<DocSuccessPage />} />

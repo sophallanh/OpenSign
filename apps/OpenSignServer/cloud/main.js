@@ -62,6 +62,9 @@ import manageSign from './parsefunction/manageSign.js';
 import getSignature from './parsefunction/getSignature.js';
 import updateEmailTemplates from './parsefunction/updateEmailTemplates.js';
 import triggerEvent from './parsefunction/triggerEvent.js';
+import getCommissions from './parsefunction/getCommissions.js';
+import saveCommission from './parsefunction/saveCommission.js';
+import deleteCommission from './parsefunction/deleteCommission.js';
 
 // This afterSave function triggers after an object is added or updated in the specified class, allowing for post-processing logic.
 Parse.Cloud.afterSave('contracts_Document', DocumentAftersave);
@@ -134,3 +137,6 @@ Parse.Cloud.define('managesign', manageSign);
 Parse.Cloud.define('getdefaultsignature', getSignature);
 Parse.Cloud.define('updateemailtemplates', updateEmailTemplates);
 Parse.Cloud.define('triggerevent', triggerEvent);
+Parse.Cloud.define('getcommissions', getCommissions);
+Parse.Cloud.define('savecommission', saveCommission);
+Parse.Cloud.define('deletecommission', deleteCommission);
