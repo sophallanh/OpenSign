@@ -6,6 +6,58 @@ import CommissionTable from "../components/commission/CommissionTable";
 import CommissionModal from "../components/commission/CommissionModal";
 import Alert from "../primitives/Alert";
 
+/**
+ * Converts commission records to a CSV string and triggers a browser download.
+ * Uses only built-in browser APIs — no extra dependencies required.
+ */
+const exportCommissionsToCSV = (commissions) => {
+  const formatCurrency = (v) => (v != null ? Number(v).toFixed(2) : "");
+  const formatDate = (iso) => (iso ? new Date(iso).toLocaleDateString("en-US") : "");
+  const escapeCell = (v) => {
+    const s = v == null ? "" : String(v);
+    // Wrap in quotes if the value contains commas, quotes, or newlines
+    return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+
+  const headers = [
+    "Referral Partner",
+    "Referral Email",
+    "Loan Amount",
+    "Commission Rate (%)",
+    "Commission Amount",
+    "Status",
+    "Paid Date",
+    "Created Date",
+    "Notes"
+  ];
+
+  const rows = commissions.map((c) => [
+    c.referralPartner,
+    c.referralEmail,
+    formatCurrency(c.loanAmount),
+    c.commissionRate != null ? c.commissionRate : "",
+    formatCurrency(c.commissionAmount),
+    c.status,
+    formatDate(c.paidDate),
+    formatDate(c.createdAt),
+    c.notes
+  ]);
+
+  const csv = [headers, ...rows]
+    .map((row) => row.map(escapeCell).join(","))
+    .join("\r\n");
+
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `commissions-${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
 const FILTER_OPTIONS = [
   { label: "All", value: "all" },
   { label: "Pending", value: "pending" },
@@ -130,10 +182,21 @@ const CommissionDashboard = () => {
             {t("commission.subtitle", "Track referral commissions from loan signings")}
           </p>
         </div>
-        <button className="op-btn op-btn-primary gap-2 self-start sm:self-auto" onClick={handleAddNew}>
-          <i className="fa-light fa-plus"></i>
-          {t("commission.add-btn", "Add Commission")}
-        </button>
+        <div className="flex gap-2 self-start sm:self-auto">
+          <button
+            className="op-btn op-btn-outline gap-2"
+            onClick={() => exportCommissionsToCSV(filteredCommissions)}
+            disabled={filteredCommissions.length === 0}
+            title={t("commission.export-tooltip", "Download current view as CSV")}
+          >
+            <i className="fa-light fa-file-csv"></i>
+            {t("commission.export-btn", "Export CSV")}
+          </button>
+          <button className="op-btn op-btn-primary gap-2" onClick={handleAddNew}>
+            <i className="fa-light fa-plus"></i>
+            {t("commission.add-btn", "Add Commission")}
+          </button>
+        </div>
       </div>
 
       {/* Alert */}
